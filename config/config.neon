@@ -1,0 +1,25 @@
+extensions:
+	events.latte: Contributte\Events\Extra\DI\EventLatteBridgeExtension
+	latte: Nette\Bridges\ApplicationDI\LatteExtension(%tempDir%/cache/latte, %debugMode%)
+
+console.cache:
+	generators:
+		latte: Contributte\Console\Extra\Cache\Generators\LatteTemplatesCacheGenerator(
+			@Nette\Application\UI\ITemplateFactory,
+			[%appDir%, %vendorDir%],
+			[**/**/tests, **/**/temp, **/**/examples],
+			%rootDir%
+		)
+
+latte:
+	templateClass: Modette\Templates\Themes\ThemedTemplate
+	strictTypes: true
+
+services:
+	modette.templates.templateConfigurator:
+		factory: Modette\Templates\TemplateConfigurator
+
+	modette.template.themes.theme:
+		factory: Modette\Templates\Themes\Theme
+		arguments:
+			- typed(Modette\Templates\Themes\Resolving\Resolver)
